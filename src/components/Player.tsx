@@ -43,8 +43,11 @@ export default function Player({ poster }: { poster: Movie["poster"] }) {
           alt="video thumbnail"
         />
         <div className="absolute justify-center items-center flex w-full h-full top-0 text-lg bg-c_black bg-opacity-70">
-          {/* <h1 className=" text-white">Subscribe to watch movie</h1> */}
-          <Subscribe />
+          <h1 className=" text-white font-bold">
+            {session?.user
+              ? "Subscribe to watch movie"
+              : "Signin and Subscribe to watch movie"}
+          </h1>
         </div>
       </div>
     );
