@@ -121,10 +121,6 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
-  /*   pages: {
-    signIn: "/auth/signin",
-  }, */
-  debug: true,
 };
 
 export default NextAuth(authOptions);

@@ -8,7 +8,6 @@ import { useDetectOutsideClick } from "./hooks/useDetectOutsideClick";
 
 export default function LoginAvatar() {
   const { data: session, status } = useSession();
-  console.log("Session:", session);
   const isDesktop = useScreenSize();
 
   const dropdownRef = useRef<HTMLElement>(null);
