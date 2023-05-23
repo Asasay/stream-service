@@ -3,7 +3,6 @@ import IconPlay from "../img/IconPlay";
 import { Movie } from "../types";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
-import Subscribe from "./Subscribe";
 
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 

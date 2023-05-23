@@ -1,10 +1,11 @@
 import React from "react";
 import PhoneInput from "react-phone-number-input";
 import { E164Number } from "libphonenumber-js/types";
+import { useSession } from "next-auth/react";
 
 function Subscribe() {
   const [value, setValue] = React.useState<E164Number>();
-
+  const { data: Session, update, status } = useSession();
   return (
     <form className="mx-5 flex flex-col max-w-3xl lg:mx-[70px]">
       <h2 className="mb-2 text-base lg:text-2xl">Welcome to BD Screens</h2>
@@ -23,7 +24,11 @@ function Subscribe() {
       />
       <button
         className="mb-12 w-[135px] text-base bg-c_red px-8 py-3 rounded"
-        type="submit"
+        onClick={(e) => {
+          if (status === "authenticated" && Session.user.subscribed === false)
+            update({ subscribed: true });
+          else e.preventDefault();
+        }}
       >
         Subscribe
       </button>

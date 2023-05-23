@@ -1,6 +1,4 @@
 import type { Movie } from "../types";
-import Image from "next/image";
-import React from "react";
 import IconArrow from "../img/IconArrow";
 import Link from "next/link";
 import Poster from "./Poster";

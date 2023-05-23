@@ -6,6 +6,15 @@ import clientPromise from "@lib/mongodb";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { compare, hash } from "bcryptjs";
 
+const adapter = MongoDBAdapter(clientPromise, {
+  collections: {
+    Users: "users",
+    Accounts: "accounts",
+    Sessions: "sessions",
+    VerificationTokens: "verification_tokens",
+  },
+  databaseName: "sample_mflix",
+});
 export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
   session: {
@@ -92,31 +101,29 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
-  adapter: MongoDBAdapter(clientPromise, {
-    collections: {
-      Users: "users",
-      Accounts: "accounts",
-      Sessions: "sessions",
-      VerificationTokens: "verification_tokens",
-    },
-    databaseName: "sample_mflix",
-  }),
+  adapter,
   callbacks: {
-    async jwt({ token, user, account, profile, session }) {
+    async jwt({ token, user, trigger, account, profile, session }) {
       //Step 1: update the token based on the user object
-
+      if (trigger === "update" && session?.subscribed && token.sub) {
+        // Note, that `session` can be any arbitrary object, remember to validate it!
+        token.subscribed = session.subscribed;
+        adapter.updateUser({
+          subscribed: token.subscribed,
+          id: token.sub,
+        });
+      }
       if (user) {
         token.subscribed = user.subscribed;
       }
       return token;
     },
 
-    async session({ session, token }) {
-      // Step 2: update the session.user based on the token object //
+    async session({ session, token, trigger, newSession }) {
       if (token && session.user) {
         //session.accessToken = token.accessToken;
         //session.user.id = token.id;
-        session.user = token;
+        session.user.subscribed = token.subscribed;
       }
       return session;
     },

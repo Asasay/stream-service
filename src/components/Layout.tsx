@@ -1,6 +1,7 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import Head from "next/head";
+import { useSession } from "next-auth/react";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -8,6 +9,8 @@ type LayoutProps = {
 };
 
 export default function Layout({ children, withHeadline }: LayoutProps) {
+  const { data: Session } = useSession();
+  if (Session?.user.subscribed) withHeadline = false;
   return (
     <>
       <Head>

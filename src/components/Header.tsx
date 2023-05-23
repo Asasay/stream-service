@@ -2,14 +2,12 @@ import React from "react";
 import Image from "next/image";
 import Subscribe from "@component/Subscribe";
 import Nav from "@component/Nav";
-import IconSearch from "../img/IconSearch";
 import logo from "../img/logo.png";
 import Background from "@component/Background";
 import useScreenSize from "./hooks/useScreenSize";
 import Link from "next/link";
 import Search from "./Search";
 import LoginAvatar from "./LoginAvatar";
-import { useSession } from "next-auth/react";
 
 type HeaderProps = {
   withHeadline?: boolean;

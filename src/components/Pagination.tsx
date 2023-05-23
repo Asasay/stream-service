@@ -28,21 +28,18 @@ function Pagination({
   return (
     <div className="flex flex-col items-center mt-12">
       {/*   Help text  */}
-      <span className="text-sm text-gray-700 dark:text-gray-400">
+      <span className="text-sm text-gray-400">
         Showing{" "}
-        <span className="font-semibold text-gray-900 dark:text-white">
+        <span className="font-semibold text-white">
           {(currentPage - 1) * entriesPerPage + 1}
         </span>{" "}
         to{" "}
-        <span className="font-semibold text-gray-900 dark:text-white">
+        <span className="font-semibold text-white">
           {currentPage == totalPages
             ? (currentPage - 1) * entriesPerPage + entriesOnCurrentPage
             : currentPage * entriesPerPage}
         </span>{" "}
-        of{" "}
-        <span className="font-semibold text-gray-900 dark:text-white">
-          {totalEntries}
-        </span>{" "}
+        of <span className="font-semibold text-white">{totalEntries}</span>{" "}
         Entries
       </span>
       <div className="inline-flex mt-2 xs:mt-0">
@@ -50,7 +47,7 @@ function Pagination({
         <Link
           href={prevPage}
           className={
-            "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" +
+            "inline-flex items-center px-4 py-2 text-sm font-medium bg-gray-800 rounded-l  border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white" +
             (currentPage == 1 ? " pointer-events-none" : "")
           }
         >
@@ -72,7 +69,7 @@ function Pagination({
         <Link
           href={nextPage}
           className={
-            "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" +
+            "inline-flex items-center px-4 py-2 text-sm font-medium   border-0 border-l border-gray-700 rounded-r bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white" +
             (currentPage == totalPages ? " pointer-events-none" : "")
           }
         >

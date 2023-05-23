@@ -1,7 +1,6 @@
 import ImageScroll from "@component/ImageScroll";
 import { Movie } from "../types";
 import { GetStaticProps } from "next";
-import clientPromise from "@lib/mongodb";
 import { getPopularMovies, getPopularSeries } from "@lib/queries";
 
 export type HomeProps = {

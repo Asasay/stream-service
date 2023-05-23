@@ -1,5 +1,5 @@
 import { MongoClient, ObjectId } from "mongodb";
-import NextAuth, { DefaultSession } from "next-auth";
+import { DefaultSession } from "next-auth";
 
 export type Movie = {
   _id: ObjectId;

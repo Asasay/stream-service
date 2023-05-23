@@ -1,8 +1,8 @@
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import Image from "next/image";
 import defaulProfilePic from "../img/defaulProfilePic.jpeg";
 import useScreenSize from "./hooks/useScreenSize";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Dropdown from "./Dropdown";
 import { useDetectOutsideClick } from "./hooks/useDetectOutsideClick";
 

@@ -1,15 +1,10 @@
-import clientPromise from "@lib/mongodb";
 import { GetServerSideProps } from "next";
-import { ObjectId } from "mongodb";
 import { Movie } from "../../../types";
-import Image from "next/image";
-import IconPlay from "../../../img/IconPlay";
 import ImageScroll from "@component/ImageScroll";
 import IconWatchlist from "../../../img/IconWatchlist";
 import IconShare from "../../../img/IconShare";
 import IconDownload from "../../../img/IconDownload";
 import Poster from "@component/Poster";
-import { useSession } from "next-auth/react";
 import Player from "@component/Player";
 import { getMovieByID, getRelatedMovies } from "@lib/queries";
 

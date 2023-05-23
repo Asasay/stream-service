@@ -1,5 +1,3 @@
-import React from "react";
-import { useRouter } from "next/router";
 import { Movie } from "../../types";
 import { GetServerSideProps } from "next";
 import clientPromise from "@lib/mongodb";
