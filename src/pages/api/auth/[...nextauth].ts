@@ -121,7 +121,7 @@ export const authOptions: AuthOptions = {
 
     async session({ session, token, trigger, newSession }) {
       if (token && session.user) {
-        session.user.subscribed = token.subscribed;
+        session.user.subscribed = token.subscribed || false;
         session.user.image = token.picture || null;
         session.user.name = token.name || null;
       }

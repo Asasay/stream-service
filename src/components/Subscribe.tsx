@@ -25,7 +25,7 @@ function Subscribe() {
       <button
         className="mb-12 w-[135px] text-base bg-c_red px-8 py-3 rounded"
         onClick={(e) => {
-          if (status === "authenticated" && Session.user.subscribed === false)
+          if (status === "authenticated" && !Session.user.subscribed)
             update({ subscribed: true });
           else e.preventDefault();
         }}
