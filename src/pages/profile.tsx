@@ -1,18 +1,17 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { GetServerSideProps } from "next";
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
-import { GetServerSidePropsContext } from "next";
 
 export default function Profile() {
-  const { data } = useSession();
-
+  const data = useSession();
   return <pre>{JSON.stringify(data, null, 2)}</pre>;
 }
 
-export async function getServerSideProps({
-  req,
-  res,
-}: GetServerSidePropsContext) {
+export const getServerSideProps: GetServerSideProps<{
+  session: Session;
+}> = async ({ req, res }) => {
   const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
@@ -30,4 +29,4 @@ export async function getServerSideProps({
       session,
     },
   };
-}
+};
