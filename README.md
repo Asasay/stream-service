@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project i made to know more about SSR and SSG based on [this design](https://www.figma.com/community/file/978204688923563508) made by Afsar.
 
+### [Deployed build on Vercel](https://stream-service-mu.vercel.app/)
+
 ## How to run
 
 Set enviroment variables in .env.local file in the root of the project:
