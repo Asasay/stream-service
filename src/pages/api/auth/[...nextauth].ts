@@ -105,12 +105,12 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, user, trigger, account, profile, session }) {
       //Step 1: update the token based on the user object
-      if (trigger === "update" && session?.subscribed && token.sub) {
+      if (trigger === "update" && session && token.sub) {
         // Note, that `session` can be any arbitrary object, remember to validate it!
-        token.subscribed = session.subscribed;
+        token = { ...token, ...session };
         adapter.updateUser({
           subscribed: token.subscribed,
-          id: token.sub,
+          id: token.sub!,
         });
       }
       if (user) {
@@ -121,9 +121,9 @@ export const authOptions: AuthOptions = {
 
     async session({ session, token, trigger, newSession }) {
       if (token && session.user) {
-        //session.accessToken = token.accessToken;
-        //session.user.id = token.id;
         session.user.subscribed = token.subscribed;
+        session.user.image = token.picture || null;
+        session.user.name = token.name || null;
       }
       return session;
     },
