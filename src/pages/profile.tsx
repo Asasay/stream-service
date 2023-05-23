@@ -17,8 +17,7 @@ export const getServerSideProps: GetServerSideProps<{
   if (!session) {
     return {
       redirect: {
-        destination:
-          "/api/auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fprofile",
+        destination: "/",
         permanent: false,
       },
     };
