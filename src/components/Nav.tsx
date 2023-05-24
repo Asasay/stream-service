@@ -10,8 +10,12 @@ import { useRouter } from "next/router";
 
 function Nav() {
   const router = useRouter();
-  const isHomePage = router.route == "/";
-  const isMoviesPage = router.route.includes("movies");
+  const isDramaPage = router.query.genres == "Drama";
+  const isComediesPage = router.query.genres == "Comedy";
+  const isMoviesPage =
+    router.route.includes("movies") && !isDramaPage && !isComediesPage;
+  const isHomePage =
+    router.route == "/" && !isMoviesPage && !isDramaPage && !isComediesPage;
   return (
     <nav className="overflow-x-scroll no-scrollbar whitespace-nowrap px-5 py-4 text-[#807E81] lg:p-0">
       <ul>
@@ -37,8 +41,12 @@ function Nav() {
             Movies
           </Link>
         </li>
-        <li className="inline-block ">
-          <IconDrama className="inline mr-2 fill-[#807E81]" />
+        <li className={"inline-block ".concat(isDramaPage ? "text-white" : "")}>
+          <IconDrama
+            className={"inline mr-2 ".concat(
+              isDramaPage ? "fill-white" : "fill-[#807E81]"
+            )}
+          />
           <Link
             className="mr-6  align-middle"
             href="/movies?genres=Drama&sortBy=popular&page=1"
@@ -58,8 +66,14 @@ function Nav() {
             Live Show
           </Link>
         </li>
-        <li className="inline-block ">
-          <IconComedies className="inline mr-2 fill-[#807E81]" />
+        <li
+          className={"inline-block ".concat(isComediesPage ? "text-white" : "")}
+        >
+          <IconComedies
+            className={"inline mr-2 ".concat(
+              isComediesPage ? "fill-white" : "fill-[#807E81]"
+            )}
+          />
           <Link
             className="mr-6  align-middle"
             href="/movies?genres=Comedy&sortBy=popular&page=1"
