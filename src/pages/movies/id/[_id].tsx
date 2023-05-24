@@ -41,9 +41,13 @@ export default function Page({ movie, related, suggested }: PageProps) {
               <p className="text-sm leading-4 font-semibold lg:text-xl">
                 {movie.year + " • " + runtime}
               </p>
-              <p className="text-sm leading-5 font-medium text-c_light_grey">
-                {movie.genres.join(", ")}
-              </p>
+              {movie.genres && (
+                <p className="text-sm leading-5 font-medium text-c_light_grey">
+                  {Array.isArray(movie.genres)
+                    ? movie.genres.join(", ")
+                    : movie.genres}
+                </p>
+              )}
             </div>
             {/* Buttons Wrapper */}
             <div className="flex items-baseline gap-12 text-c_light_grey text-sm leading-5 font-medium">
