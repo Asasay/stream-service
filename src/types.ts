@@ -9,10 +9,37 @@ export type Movie = {
   poster: string;
   year: number;
   runtime: number;
-  genres: string[];
+  genres?: Genre[] | Genre;
   totalCount: number;
   type: string;
 };
+
+export type Genre =
+  | "Comedy"
+  | "Action"
+  | "Horror"
+  | "Crime"
+  | "Sport"
+  | "Drama"
+  | "Romance"
+  | "Sci-Fi"
+  | "History"
+  | "Music"
+  | "Fantasy"
+  | "Musical"
+  | "Film-Noir"
+  | "Mystery"
+  | "Thriller"
+  | "War"
+  | "Animation"
+  | "News"
+  | "Western"
+  | "Documentary"
+  | "Talk-Show"
+  | "Adventure"
+  | "Biography"
+  | "Family"
+  | "Short";
 
 declare global {
   var _mongoClientPromise: Promise<MongoClient>;

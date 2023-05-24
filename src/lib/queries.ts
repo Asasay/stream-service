@@ -1,6 +1,6 @@
 import { Collection, Db, Document, ObjectId, WithId } from "mongodb";
 import clientPromise from "./mongodb";
-import { Movie } from "../types";
+import { Genre, Movie } from "../types";
 
 async function getMoviesCollection(): Promise<Collection> {
   const client = await clientPromise;
@@ -45,15 +45,15 @@ export async function getPopularMovies(
   limit = 0,
   entriesPerPage?: number,
   pageNumber?: number,
-  genres?: string | string[] | undefined
+  genres?: Movie["genres"]
 ) {
   const collection = await getMoviesCollection();
 
-  let genresAggr: { genres: { $eq: string[] } } | undefined;
+  let genresAggr: { genres: { $all: string[] } } | undefined;
   if (typeof genres === "string") {
-    genresAggr = { genres: { $eq: [genres] } };
+    genresAggr = { genres: { $all: [genres] } };
   } else if (Array.isArray(genres)) {
-    genresAggr = { genres: { $eq: genres } };
+    genresAggr = { genres: { $all: genres } };
   } else genresAggr = undefined;
 
   let paginate: Document[] = [];
