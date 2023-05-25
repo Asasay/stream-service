@@ -13,7 +13,7 @@ export default function LoginAvatar() {
   const dropdownRef = useRef<HTMLElement>(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
 
-  if (session || status == "loading") {
+  if (session) {
     return (
       <div className="relative">
         <button
@@ -53,13 +53,21 @@ export default function LoginAvatar() {
         />
       </div>
     );
-  } else
-    return (
-      <button
-        className="text-sm bg-c_red px-3 py-1 rounded-sm"
-        onClick={() => signIn()}
-      >
-        Sign In
-      </button>
-    );
+  } else {
+    if (status == "loading")
+      return (
+        <div className="text-sm bg-c_light_grey px-3 py-1 rounded-sm">
+          Loading...
+        </div>
+      );
+    else
+      return (
+        <button
+          className="text-sm bg-c_red px-3 py-1 rounded-sm"
+          onClick={() => signIn()}
+        >
+          Sign In
+        </button>
+      );
+  }
 }

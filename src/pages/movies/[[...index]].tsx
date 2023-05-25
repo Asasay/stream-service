@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { url } from "inspector";
 import { UrlObject } from "url";
+import Head from "next/head";
 
 function MoviesPage({
   movies,
@@ -70,11 +71,16 @@ function MoviesPage({
   console.log(router.query.genres);
   return (
     <div>
+      <Head>
+        <title>{"BDScreens | " + (router.query.genres || "Movies")}</title>
+      </Head>
       <div className="flex flex-wrap justify-center gap-4 mx-5 mt-8 lg:gap-8 lg:mx-[70px] lg:mt-12">
         <hr className="h-1 w-full bg-c_dark_grey border-0" />
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
           <div>
-            <label htmlFor="sort">Sort by:</label>
+            <label htmlFor="sort" className="mr-2">
+              Sort by:
+            </label>
             <select
               name="sort"
               value={sortBy}

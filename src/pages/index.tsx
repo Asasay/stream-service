@@ -2,6 +2,7 @@ import ImageScroll from "@component/ImageScroll";
 import { Movie } from "../types";
 import { GetStaticProps } from "next";
 import { getPopularMovies, getPopularSeries } from "@lib/queries";
+import { useSession } from "next-auth/react";
 
 export type HomeProps = {
   popularMovies: Movie[];

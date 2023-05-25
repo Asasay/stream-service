@@ -7,6 +7,7 @@ import IconDownload from "../../../img/IconDownload";
 import Poster from "@component/Poster";
 import Player from "@component/Player";
 import { getMovieByID, getRelatedMovies } from "@lib/queries";
+import Head from "next/head";
 
 type PageProps = {
   movie: Movie;
@@ -23,6 +24,9 @@ export default function Page({ movie, related, suggested }: PageProps) {
 
   return (
     <>
+      <Head>
+        <title>{"BDScreens | " + movie.title}</title>
+      </Head>
       {/* Player + Title, Year, Genres + Buttons + Movies for you Wrapper */}
       <div className="flex justify-between mb-4 lg:mx-[70px] lg:mb-10">
         {/* Player + Title, Year, Genres + Buttons Wrapper */}

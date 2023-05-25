@@ -15,6 +15,10 @@ export default function Layout({ children, withHeadline }: LayoutProps) {
     <>
       <Head>
         <title>BDScreens</title>
+        <meta
+          name="description"
+          content="Your best assistant in the fight against procrastination"
+        ></meta>
       </Head>
       <Header withHeadline={withHeadline} />
       <main id="main">{children}</main>
