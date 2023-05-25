@@ -68,7 +68,6 @@ function MoviesPage({
     return urlObject;
   };
 
-  console.log(router.query.genres);
   return (
     <div>
       <Head>

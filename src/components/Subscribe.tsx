@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 function Subscribe() {
   const [value, setValue] = React.useState<E164Number>();
   const { data: Session, update, status } = useSession();
+
   return (
     <form className="mx-5 flex flex-col max-w-3xl lg:mx-[70px]">
       <h2 className="mb-2 text-base lg:text-2xl">Welcome to BD Screens</h2>

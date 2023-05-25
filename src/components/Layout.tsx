@@ -2,15 +2,22 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
+import React from "react";
+import { useRouter } from "next/router";
 
 type LayoutProps = {
   children: React.ReactNode;
-  withHeadline: boolean;
 };
 
-export default function Layout({ children, withHeadline }: LayoutProps) {
-  const { data: Session } = useSession();
-  if (Session?.user.subscribed) withHeadline = false;
+export default function Layout({ children }: LayoutProps) {
+  const { data: Session, update } = useSession();
+  const router = useRouter();
+  const withHeadline = !(
+    router.pathname.includes("id") ||
+    router.pathname.includes("error") ||
+    router.pathname.includes("auth") ||
+    Session?.user.subscribed
+  );
   return (
     <>
       <Head>

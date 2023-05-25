@@ -8,15 +8,9 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
-  const router = useRouter();
-  const withHeadline =
-    !router.pathname.includes("id") &&
-    !router.pathname.includes("error") &&
-    !router.pathname.includes("auth");
-
   return (
     <SessionProvider session={session}>
-      <Layout withHeadline={withHeadline}>
+      <Layout>
         <Component {...pageProps} />
       </Layout>
     </SessionProvider>
