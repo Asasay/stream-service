@@ -53,6 +53,7 @@ function MoviesPage({
     const urlObject = {
       pathname: "/movies",
       query: newQuery,
+      hash: "srtdvdr",
     };
 
     if (typeof newQuery.genres == "string") {
@@ -74,7 +75,7 @@ function MoviesPage({
         <title>{"BDScreens | " + (router.query.genres || "Movies")}</title>
       </Head>
       <div className="flex flex-wrap justify-center gap-4 mx-5 mt-8 lg:gap-8 lg:mx-[70px] lg:mt-12">
-        <hr className="h-1 w-full bg-c_dark_grey border-0" />
+        <hr id="srtdvdr" className="h-1 w-full bg-c_dark_grey border-0" />
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
           <div>
             <label htmlFor="sort" className="mr-2">
@@ -82,6 +83,7 @@ function MoviesPage({
             </label>
             <select
               name="sort"
+              id="sort"
               value={sortBy}
               onChange={(e) => {
                 const urlobj = {
