@@ -111,10 +111,11 @@ export const authOptions: AuthOptions = {
         token = { ...token, ...session };
         adapter.updateUser({
           subscribed: token.subscribed,
-          id: token.sub!,
+          id: token.id,
         });
       }
       if (user) {
+        token.id = user.id;
         token.subscribed = user.subscribed;
       }
       return token;
