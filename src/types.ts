@@ -52,6 +52,7 @@ declare module "next-auth" {
 
   interface User {
     subscribed: boolean;
+    watchlist: Movie["_id"][];
     id: string;
   }
 
@@ -63,6 +64,7 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
   interface JWT {
+    watchlist: Movie["_id"][];
     subscribed: boolean;
     accessToken: string;
     id: string;

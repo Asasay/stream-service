@@ -2,7 +2,7 @@ import { Collection, Db, Document, ObjectId, WithId } from "mongodb";
 import clientPromise from "./mongodb";
 import { Genre, Movie } from "../types";
 
-async function getMoviesCollection(): Promise<Collection> {
+export async function getMoviesCollection(): Promise<Collection> {
   const client = await clientPromise;
   const db = client.db("sample_mflix");
   const collection = db.collection("movies");
@@ -103,4 +103,54 @@ export async function getPopularSeries(limit: number = 0) {
     ])
     .toArray();
   return popular;
+}
+
+export async function getWatchlistByUserID(
+  id: string
+): Promise<WithId<Movie[]>> {
+  const client = await clientPromise;
+  const db = client.db("sample_mflix");
+
+  const user = await db.collection("users").findOne({
+    _id: new ObjectId(id),
+  });
+
+  if (user == null) return Promise.reject("No user with  such id");
+  else if (user.watchlist == undefined)
+    return Promise.reject("Current user missing watchlist field in db");
+
+  const movies = (await db
+    .collection("movies")
+    .find(
+      { _id: { $in: user.watchlist.map((s: string) => new ObjectId(s)) } },
+      { projection: { title: 1, poster: 1, year: 1 } }
+    )
+    .toArray()) as WithId<Movie[]>;
+
+  return movies;
+}
+
+export async function updateUserWatchlist(userId: string, movieId: string) {
+  const client = await clientPromise;
+  const db = client.db("sample_mflix");
+
+  await db.collection("users").updateOne({ _id: new ObjectId(userId) }, [
+    {
+      $set: {
+        watchlist: {
+          $cond: {
+            if: { $eq: [{ $type: "$watchlist" }, "missing"] },
+            then: [movieId], // Add watchlist field and set it to an array with movieId
+            else: {
+              $cond: [
+                { $in: [movieId, "$watchlist"] },
+                { $setDifference: ["$watchlist", [movieId]] },
+                { $concatArrays: ["$watchlist", [movieId]] },
+              ],
+            },
+          },
+        },
+      },
+    },
+  ]);
 }

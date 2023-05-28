@@ -8,6 +8,7 @@ import Poster from "@component/Poster";
 import Player from "@component/Player";
 import { getMovieByID, getRelatedMovies } from "@lib/queries";
 import Head from "next/head";
+import { useSession } from "next-auth/react";
 
 type PageProps = {
   movie: Movie;
@@ -16,6 +17,7 @@ type PageProps = {
 };
 
 export default function Page({ movie, related, suggested }: PageProps) {
+  const { data: session, update } = useSession();
   const runtimeHours = Math.floor(movie.runtime / 60);
   const runtimeMinutes = movie.runtime % 60;
   const runtime = `${runtimeHours.toString()}h ${runtimeMinutes
@@ -55,10 +57,13 @@ export default function Page({ movie, related, suggested }: PageProps) {
             </div>
             {/* Buttons Wrapper */}
             <div className="flex items-baseline gap-12 text-c_light_grey text-sm leading-5 font-medium">
-              <a className="flex gap-3 flex-col items-center">
+              <button
+                className="flex gap-3 flex-col items-center"
+                onClick={() => update({ watchlist: movie._id })}
+              >
                 <IconWatchlist className="fill-[#807E81]" />
                 Watchlist
-              </a>
+              </button>
               <a className="flex gap-3 flex-col items-center">
                 <IconShare />
                 Share

@@ -8,13 +8,20 @@ import useScreenSize from "./hooks/useScreenSize";
 import Link from "next/link";
 import Search from "./Search";
 import LoginAvatar from "./LoginAvatar";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
-type HeaderProps = {
-  withHeadline?: boolean;
-};
-
-function Header({ withHeadline = true }: HeaderProps) {
+function Header() {
   const isDesktop = useScreenSize();
+  const { data: Session, update, status } = useSession();
+  const router = useRouter();
+  const withHeadline = !(
+    status === "loading" ||
+    Session?.user.subscribed ||
+    router.pathname.includes("id") ||
+    router.pathname.includes("error") ||
+    router.pathname.includes("auth")
+  );
   return (
     <header className="flex flex-col lg:relative shadow shadow-black lg:z-10">
       {isDesktop && withHeadline && <Background />}

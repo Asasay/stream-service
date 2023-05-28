@@ -5,6 +5,7 @@ import GitHubProvider from "next-auth/providers/github";
 import clientPromise from "@lib/mongodb";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { compare, hash } from "bcryptjs";
+import { updateUserWatchlist } from "@lib/queries";
 
 const adapter = MongoDBAdapter(clientPromise, {
   collections: {
@@ -75,6 +76,7 @@ export const authOptions: AuthOptions = {
             password: await hash(credentials.password, 12),
             phone: null,
             subscribed: false,
+            watchlist: [],
           });
 
           userDB = await usersDB.findOne({
@@ -96,6 +98,7 @@ export const authOptions: AuthOptions = {
           email: userDB.email,
           phone: userDB.phone,
           subscribed: userDB.subscribed,
+          watchlist: userDB.watchlist,
         };
 
         return user;
@@ -105,21 +108,23 @@ export const authOptions: AuthOptions = {
   adapter,
   callbacks: {
     async jwt({ token, user, trigger, account, profile, session }) {
-      if (trigger === "update") {
-      }
       if (trigger === "update" && session && token.id) {
-        token = { ...token, ...session };
         if (session.hasOwnProperty("subscribed")) {
+          token = { ...token, ...session };
           adapter.updateUser({
             subscribed: token.subscribed,
             id: token.id,
           });
+        }
+        if (session.hasOwnProperty("watchlist")) {
+          updateUserWatchlist(token.id, session.watchlist);
         }
       }
       if (user) {
         token.id = user.id;
         token.subscribed = user.subscribed;
       }
+      console.log(token);
       return token;
     },
 
@@ -128,6 +133,7 @@ export const authOptions: AuthOptions = {
         session.user.subscribed = token.subscribed || false;
         session.user.image = token.picture || null;
         session.user.name = token.name || null;
+        session.user.id = token.id;
       }
       return session;
     },
