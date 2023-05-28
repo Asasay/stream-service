@@ -29,7 +29,7 @@ export default function Page({ movie, related, suggested }: PageProps) {
       <Head>
         <title>{"BDScreens | " + movie.title}</title>
       </Head>
-      {/* Player + Title, Year, Genres + Buttons + Movies for you Wrapper */}
+      {/* Player + Title, Year, Genres + Buttons + "Movies for you" Wrapper */}
       <div className="flex justify-between mb-4 lg:mx-[70px] lg:mb-10">
         {/* Player + Title, Year, Genres + Buttons Wrapper */}
         <div className="flex flex-grow flex-col">

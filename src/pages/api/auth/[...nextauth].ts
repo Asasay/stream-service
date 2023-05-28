@@ -17,8 +17,8 @@ const adapter = MongoDBAdapter(clientPromise, {
   databaseName: "sample_mflix",
 });
 export const authOptions: AuthOptions = {
-  // Configure one or more authentication providers
   session: {
+    //Session is coupled with JWT
     strategy: "jwt",
   },
   providers: [
@@ -40,12 +40,7 @@ export const authOptions: AuthOptions = {
     }),
 
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
-      // `credentials` is used to generate a form on the sign in page.
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         email: {
           label: "Email",
@@ -60,16 +55,17 @@ export const authOptions: AuthOptions = {
           required: true,
         },
       },
+      //Fires when "Sign in with Credentials" clicked
       async authorize(credentials, req) {
         if (!credentials) throw new Error("No credentials sent");
 
         const client = await clientPromise;
         const usersDB = client.db("sample_mflix").collection("users");
-
+        //Search for  user in DB
         let userDB = await usersDB.findOne({
           email: credentials.email,
         });
-
+        //If user doesnt exist create one
         if (!userDB) {
           await usersDB.insertOne({
             email: credentials.email,
@@ -78,11 +74,12 @@ export const authOptions: AuthOptions = {
             subscribed: false,
             watchlist: [],
           });
-
+          //Query and store created user in variable
           userDB = await usersDB.findOne({
             email: credentials.email,
           });
         } else {
+          //Else: user exists -> compare password hash stored in DB with password passed with credentials
           const passwordValid = await compare(
             credentials.password,
             userDB.password
@@ -91,7 +88,9 @@ export const authOptions: AuthOptions = {
             return null;
           }
         }
+
         if (!userDB) throw new Error("Cant find user in database");
+        //Populate next-auth user object with DB user data
         const user = {
           id: userDB._id.toString(),
           name: userDB.name,
@@ -100,7 +99,7 @@ export const authOptions: AuthOptions = {
           subscribed: userDB.subscribed,
           watchlist: userDB.watchlist,
         };
-
+        //Pass it to jwt callback
         return user;
       },
     }),
@@ -109,6 +108,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, user, trigger, account, profile, session }) {
       if (trigger === "update" && session && token.id) {
+        //Handle subscribe button click
         if (session.hasOwnProperty("subscribed")) {
           token = { ...token, ...session };
           adapter.updateUser({
@@ -116,18 +116,20 @@ export const authOptions: AuthOptions = {
             id: token.id,
           });
         }
+        //Handle watchlist button
         if (session.hasOwnProperty("watchlist")) {
           updateUserWatchlist(token.id, session.watchlist);
         }
       }
+      //Populate jwt with user data after authorization
       if (user) {
         token.id = user.id;
         token.subscribed = user.subscribed;
       }
-      console.log(token);
+
       return token;
     },
-
+    //Populate session after jwt callback
     async session({ session, token }) {
       if (token && session.user) {
         session.user.subscribed = token.subscribed || false;

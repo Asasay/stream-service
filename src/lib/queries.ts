@@ -1,16 +1,18 @@
-import { Collection, Db, Document, ObjectId, WithId } from "mongodb";
+import { Collection, Document, ObjectId, WithId } from "mongodb";
 import clientPromise from "./mongodb";
-import { Genre, Movie } from "../types";
+import { Movie } from "../types";
 
-export async function getMoviesCollection(): Promise<Collection> {
+export async function getCollection(
+  collectionName: string
+): Promise<Collection> {
   const client = await clientPromise;
   const db = client.db("sample_mflix");
-  const collection = db.collection("movies");
+  const collection = db.collection(collectionName);
   return collection;
 }
 
 export async function getMovieByID(id: string): Promise<WithId<Movie>> {
-  const collection = await getMoviesCollection();
+  const collection = await getCollection("movies");
   const movie = (await collection.findOne({
     _id: new ObjectId(id),
   })) as WithId<Movie>;
@@ -18,7 +20,7 @@ export async function getMovieByID(id: string): Promise<WithId<Movie>> {
 }
 
 export async function getRelatedMovies(movie: WithId<Movie>, size: number) {
-  const collection = await getMoviesCollection();
+  const collection = await getCollection("movies");
   const related = await collection
     .aggregate([
       {
@@ -47,7 +49,7 @@ export async function getPopularMovies(
   pageNumber?: number,
   genres?: Movie["genres"]
 ) {
-  const collection = await getMoviesCollection();
+  const collection = await getCollection("movies");
 
   let genresAggr: { genres: { $all: string[] } } | undefined;
   if (typeof genres === "string") {
@@ -89,7 +91,7 @@ export async function getPopularMovies(
 }
 
 export async function getPopularSeries(limit: number = 0) {
-  const collection = await getMoviesCollection();
+  const collection = await getCollection("movies");
   const popular = await collection
     .aggregate([
       { $match: { "tomatoes.fresh": { $exists: true }, type: "series" } },
@@ -108,10 +110,9 @@ export async function getPopularSeries(limit: number = 0) {
 export async function getWatchlistByUserID(
   id: string
 ): Promise<WithId<Movie[]>> {
-  const client = await clientPromise;
-  const db = client.db("sample_mflix");
-
-  const user = await db.collection("users").findOne({
+  const collectionUsers = await getCollection("users");
+  const collectionMovies = await getCollection("movies");
+  const user = await collectionUsers.findOne({
     _id: new ObjectId(id),
   });
 
@@ -119,8 +120,7 @@ export async function getWatchlistByUserID(
   else if (user.watchlist == undefined)
     return Promise.reject("Current user missing watchlist field in db");
 
-  const movies = (await db
-    .collection("movies")
+  const movies = (await collectionMovies
     .find(
       { _id: { $in: user.watchlist.map((s: string) => new ObjectId(s)) } },
       { projection: { title: 1, poster: 1, year: 1 } }
@@ -131,10 +131,9 @@ export async function getWatchlistByUserID(
 }
 
 export async function updateUserWatchlist(userId: string, movieId: string) {
-  const client = await clientPromise;
-  const db = client.db("sample_mflix");
+  const collection = await getCollection("users");
 
-  await db.collection("users").updateOne({ _id: new ObjectId(userId) }, [
+  await collection.updateOne({ _id: new ObjectId(userId) }, [
     {
       $set: {
         watchlist: {

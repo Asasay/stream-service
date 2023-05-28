@@ -15,7 +15,7 @@ export default async function handler(
         $text: { $search: req.query.text.toString() },
       };
 
-      // Return only the `title` of each matched document
+      // Return a title, poster, and year of each matched document
       const projection = {
         title: 1,
         poster: 1,
@@ -29,5 +29,5 @@ export default async function handler(
     } catch (e) {
       console.error(e);
     }
-  else res.status(500).json({ error: "text empty" });
+  else res.status(500).json({ error: "Text  input is empty" });
 }

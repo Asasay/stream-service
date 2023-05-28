@@ -1,12 +1,10 @@
-import { Genre, Movie } from "../../types";
+import { Movie } from "../../types";
 import { GetServerSideProps } from "next";
 import clientPromise from "@lib/mongodb";
 import Poster from "@component/Poster";
 import Pagination from "@component/Pagination";
 import { getPopularMovies } from "@lib/queries";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { url } from "inspector";
 import { UrlObject } from "url";
 import Head from "next/head";
 
@@ -47,7 +45,7 @@ function MoviesPage({
     "History",
     "Mystery",
   ];
-
+  //Generates new query for each genre chip based on current route
   const genreChipHref = (genre: string): UrlObject => {
     const newQuery = { ...router.query };
     const urlObject = {
@@ -76,7 +74,9 @@ function MoviesPage({
       </Head>
       <div className="flex flex-wrap justify-center gap-4 mx-5 mt-8 lg:gap-8 lg:mx-[70px] lg:mt-12">
         <hr id="srtdvdr" className="h-1 w-full bg-c_dark_grey border-0" />
+        {/* Sorting + chips wrapper */}
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
+          {/* Select sort wrapper */}
           <div>
             <label htmlFor="sort" className="mr-2">
               Sort by:
@@ -99,6 +99,8 @@ function MoviesPage({
               <option value="recent">Most Recent</option>
             </select>
           </div>
+
+          {/* Genre chips wrapper */}
           <div className="flex flex-wrap gap-y-2 items-center justify-start w-full">
             {uniqueGenres.map((genre, index) => (
               <button
@@ -114,6 +116,8 @@ function MoviesPage({
           </div>
         </div>
         <hr className="h-1 w-full bg-c_dark_grey border-0" />
+
+        {/* Movie thumbnails */}
         {movies.length > 0 &&
           movies.map((movie) => (
             <Poster
@@ -124,6 +128,8 @@ function MoviesPage({
             />
           ))}
       </div>
+
+      {/* Pagination */}
       {movies.length > 0 && (
         <Pagination
           entriesPerPage={18}
